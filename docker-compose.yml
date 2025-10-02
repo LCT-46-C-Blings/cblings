@@ -1,9 +1,40 @@
+version: '3.8'
+
 services:
   front:
-    build: front/.
+    build: 
+      context: ./front
+      dockerfile: Dockerfile
     ports: 
-      - "5137:5137"
+      - "80:5137"
+    environment:
+      - VITE_API_URL=http://localhost:5050
+    volumes:
+      - ./front:.
+    networks:
+      - cblings-network
   back:
-    build: back/.
+    build: 
+      context: ./back
+      dockerfile: Dockerfile
     ports: 
-      - "8080:5050"
+      - "5050:5050"
+    volumes:
+      - sqlite-data:/instance
+    networks:
+      - cblings-network
+  remote-data:
+    build:
+      context: ./remote-data
+      dockerfile: Dockerfile
+    ports:
+      - "6060:8080"
+    networks:
+      - cblings-network
+volumes:
+  sqlite-data:
+    driver: local
+
+networks:
+  cblings-network:
+    driver: bridge
