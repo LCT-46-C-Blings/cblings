@@ -1,0 +1,9 @@
+services:
+  front:
+    build: front/.
+    ports: 
+      - "5137:5137"
+  back:
+    build: back/.
+    ports: 
+      - "8080:5050"
